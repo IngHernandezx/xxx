@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIVEZONE | Streaming</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">LIVE<span>ZONE</span></div>
+    <div class="live">● EN VIVO</div>
+</header>
+
+<main>
+    <h1>Mi transmisión</h1>
+    <p class="subtitle">Bienvenido a tu espacio de streaming.</p>
+
+    <div class="layout">
+        <section>
+            <div class="video-container">
+                <div class="screen">
+                    <video id="video" autoplay muted playsinline></video>
+
+                    <div class="placeholder" id="placeholder">
+                        <div class="camera">📹</div>
+                        <h3>Tu transmisión aparecerá aquí</h3>
+                        <p>Activa tu cámara para comenzar</p>
+                    </div>
+
+                    <div class="status" id="status">● EN VIVO</div>
+                </div>
+
+                <div class="details">
+                    <h2 id="title">Mi primera transmisión</h2>
+                    <p>Transmitiendo desde LIVEZONE</p>
+                </div>
+
+                <div class="controls">
+                    <button class="red" id="cameraBtn">📹 Iniciar cámara</button>
+                    <button id="screenBtn">🖥 Compartir pantalla</button>
+                    <button id="micBtn">🎙 Silenciar micrófono</button>
+                    <button id="stopBtn">⏹ Detener</button>
+                </div>
+            </div>
+
+            <div class="settings">
+                <h3>⚙ Configuración</h3>
+                <input id="titleInput" type="text" placeholder="Nombre de tu directo">
+                <button class="green" id="saveBtn">Guardar título</button>
+            </div>
+        </section>
+
+        <aside class="chat">
+            <h3>💬 Chat en vivo</h3>
+
+            <div id="messages">
+                <div class="message">
+                    <strong>Sistema:</strong> Bienvenido a LIVEZONE.
+                </div>
+            </div>
+
+            <div class="chat-form">
+                <input id="chatInput" type="text" placeholder="Escribe un mensaje...">
+                <button class="red" id="sendBtn">Enviar</button>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<footer>LIVEZONE © 2026</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

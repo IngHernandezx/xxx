@@ -1,0 +1,157 @@
+
+const video = document.getElementById("video");
+const placeholder = document.getElementById("placeholder");
+const statusBox = document.getElementById("status");
+
+let stream = null;
+let micOn = true;
+
+// INICIAR CÁMARA
+async function startCamera() {
+    try {
+        stopStream();
+
+        const newStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+        });
+
+        setStream(newStream);
+
+    } catch (error) {
+        alert("Error al abrir la cámara: " + error.message);
+    }
+}
+
+// COMPARTIR PANTALLA
+async function startScreen() {
+    try {
+        stopStream();
+
+        const newStream = await navigator.mediaDevices.getDisplayMedia({
+            video: true,
+            audio: true
+        });
+
+        setStream(newStream);
+
+        newStream.getVideoTracks()[0].addEventListener(
+            "ended",
+            stopStream
+        );
+
+    } catch (error) {
+        alert("No se pudo compartir la pantalla: " + error.message);
+    }
+}
+
+// MOSTRAR TRANSMISIÓN
+function setStream(newStream) {
+    stream = newStream;
+    video.srcObject = stream;
+
+    placeholder.style.display = "none";
+    statusBox.style.display = "block";
+
+    micOn = true;
+
+    document.getElementById("micBtn").textContent =
+        "🎙 Silenciar micrófono";
+}
+
+// DETENER TRANSMISIÓN
+function stopStream() {
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+
+    stream = null;
+    video.srcObject = null;
+
+    placeholder.style.display = "flex";
+    statusBox.style.display = "none";
+}
+
+// ACTIVAR Y SILENCIAR MICRÓFONO
+function toggleMic() {
+    if (!stream) {
+        alert("Primero inicia una transmisión.");
+        return;
+    }
+
+    const tracks = stream.getAudioTracks();
+
+    if (tracks.length === 0) {
+        alert("No hay micrófono disponible.");
+        return;
+    }
+
+    micOn = !micOn;
+
+    tracks.forEach(track => {
+        track.enabled = micOn;
+    });
+
+    document.getElementById("micBtn").textContent =
+        micOn ? "🎙 Silenciar micrófono" : "🔇 Activar micrófono";
+}
+
+// ENVIAR MENSAJES
+function sendMessage() {
+    const input = document.getElementById("chatInput");
+    const messages = document.getElementById("messages");
+
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    const message = document.createElement("div");
+    message.className = "message";
+
+    const name = document.createElement("strong");
+    name.textContent = "Tú: ";
+
+    message.appendChild(name);
+    message.appendChild(document.createTextNode(text));
+
+    messages.appendChild(message);
+
+    input.value = "";
+    messages.scrollTop = messages.scrollHeight;
+}
+
+// CAMBIAR TÍTULO
+function saveTitle() {
+    const title = document.getElementById("titleInput").value.trim();
+
+    if (title) {
+        document.getElementById("title").textContent = title;
+    }
+}
+
+// CONECTAR BOTONES
+document.getElementById("cameraBtn")
+    .addEventListener("click", startCamera);
+
+document.getElementById("screenBtn")
+    .addEventListener("click", startScreen);
+
+document.getElementById("micBtn")
+    .addEventListener("click", toggleMic);
+
+document.getElementById("stopBtn")
+    .addEventListener("click", stopStream);
+
+document.getElementById("sendBtn")
+    .addEventListener("click", sendMessage);
+
+document.getElementById("saveBtn")
+    .addEventListener("click", saveTitle);
+
+document.getElementById("chatInput")
+    .addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
+
